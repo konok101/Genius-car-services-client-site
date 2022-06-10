@@ -12,8 +12,8 @@ const Services = () => {
 
     }, []);
     return (
-        <div className='container'>
-            <h1 className='services-title m-5'>Our Total Services: {services.length}</h1>
+        <div id="service" className='container '>
+            <h1 className='services-title mt-5'>Our Total Services: {services.length}</h1>
             <div className='services-container'>
                 {
                     services.map(service => <Service
