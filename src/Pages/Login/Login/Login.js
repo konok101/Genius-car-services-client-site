@@ -10,6 +10,7 @@ const Login = () => {
     const emailRef = useRef('');
     const passRef = useRef('');
     const navigate = useNavigate();
+    let errorElement;
 
     const [
         signInWithEmailAndPassword,
@@ -20,6 +21,12 @@ const Login = () => {
 
     if (user) {
         navigate('/home')
+    }
+
+    if (error) {
+        errorElement = <div>
+            <p className='text-denger'>{error?.message}</p>
+        </div>
     }
     const handleSubmit = event => {
         event.preventDefault();
@@ -38,19 +45,19 @@ const Login = () => {
             <h2 className='text-center text-primary'>Please Login</h2>
 
             <Form onSubmit={handleSubmit}>
+
                 <Form.Group className="mb-3" controlId="formBasicEmail">
                     <Form.Control ref={emailRef} type="email" placeholder="Enter email" required />
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="formBasicPassword">
                     <Form.Control ref={passRef} type="password" placeholder="Password" required />
                 </Form.Group>
-                <Form.Group className="mb-3" controlId="formBasicCheckbox">
-                    <Form.Check type="checkbox" label="Check me out" />
-                </Form.Group>
-                <Button variant="primary" type="submit">
-                    Submit
+
+                <Button className='mx-auto w-50 d-block' variant="primary" type="submit">
+                     Login
                 </Button>
             </Form>
+            {errorElement}
             <p>New ro Genius car <Link to='/register' className='text-danger pe-auto text-deceration-none' onClick={naviGateRegister}>Please Register</Link> </p>
             <SocialLogin></SocialLogin>
         </div>
