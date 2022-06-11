@@ -23,7 +23,7 @@ const Login = () => {
     const handleSubmit = event => {
         event.preventDefault();
         const email= emailRef.current.value;
-        const password= passRef.current.value;
+        const password= passRef.current.value; 
 
          signInWithEmailAndPassword(email, password)
 
