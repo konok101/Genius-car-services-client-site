@@ -1,18 +1,20 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useCreateUserWithEmailAndPassword } from 'react-firebase-hooks/auth';
+import { useCreateUserWithEmailAndPassword, useUpdateProfile } from 'react-firebase-hooks/auth';
 import './Register.css'
 import auth from '../../../firebase.init'
 import SocialLogin from '../SocialLogin/SocialLogin';
+import { async } from '@firebase/util';
 const Register = () => {
-    const [agree, setAgree] = useState();
+    const [agree, setAgree] = useState(false);
+    const [updateProfile, updating, UpdateError] = useUpdateProfile(auth);
 
     const [
         createUserWithEmailAndPassword,
         user,
         loading,
         error,
-    ] = useCreateUserWithEmailAndPassword(auth);
+    ] = useCreateUserWithEmailAndPassword(auth, { sendEmailVerification: true });
 
     const naviGate = useNavigate();
 
@@ -21,16 +23,19 @@ const Register = () => {
     }
 
     if (user) {
-        naviGate('/home');
+        console.log('user', user)
     }
-    const handleRegister = event => {
+    const handleRegister =async event => {
         event.preventDefault();
         const name = event.target.name.value;
         const password = event.target.password.value;
         const email = event.target.email.value;
-        if(agree) {
-            createUserWithEmailAndPassword(email, password);
-        }
+
+        await createUserWithEmailAndPassword(email, password);
+        await updateProfile({ displayName: name });
+        console.log('Updated profile');
+        naviGate('/home')
+
 
 
     }
@@ -41,7 +46,7 @@ const Register = () => {
                 <input type="text" name="name" id="" placeholder='your name' />
                 <input type="email" name='email' id='' placeholder='your email' required />
                 <input type="password" name="password" placeholder='your password' required id="" />
-                <input onClick={()=>setAgree(!agree)} type="checkbox" name="terms" id="terms" />
+                <input onClick={() => setAgree(!agree)} type="checkbox" name="terms" id="terms" />
                 <label htmlFor="terms">Aecpts Genius Terms and conditions</label>
                 <input disabled={!agree} className='w-50 mx-auto btn btn-primary mt-2 ' type="submit" value="Register  " />
             </form>
